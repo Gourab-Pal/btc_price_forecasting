@@ -1,0 +1,24 @@
+# Convert 'startTime' and 'endTime' columns from Unix milliseconds to datetime if they exist
+if 'startTime' in df.columns:
+    df['startTime'] = pd.to_datetime(df['startTime'], unit='ms')
+else:
+    print("Error: 'startTime' column not found")
+
+# Convert other necessary columns to numeric values
+df['open'] = pd.to_numeric(df['open'])
+df['high'] = pd.to_numeric(df['high'])
+df['low'] = pd.to_numeric(df['low'])
+df['close'] = pd.to_numeric(df['close'])
+df['volume'] = pd.to_numeric(df['volume'])
+
+# Set 'startTime' as the index if it exists
+if 'startTime' in df.columns:
+    df.set_index('startTime', inplace=True)
+else:
+    print("Error: Cannot set 'startTime' as index because it is missing")
+
+# Now you can create the DataFrame for mplfinance and plot
+df_mpf = df[['open', 'high', 'low', 'close', 'volume']]
+
+# Plot the candlestick chart
+mpf.plot(df_mpf, type='candle', style='charles', title='BTC/INR Candlestick Chart', volume=True)
